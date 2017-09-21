@@ -32,6 +32,8 @@ You can browse your output file somefile.txt to verify if the certificate you in
 To import the artifactory site's certificate into your keystore: 
 keytool -import -trustcacerts -keystore "%JAVA_HOME%\jre\lib\security\cacerts" -alias "someCert" -file someCert.cer -storepass changeit
 Note if it's really successful, you might need to run cmd as admin or sudo
+- install Debian package system command: sudo yum install dpkg (Probably not needed!)
+
 ================================= Q&A
 Q:When Right-click on your desktop for 'Change Desktop Background', you got this message:
 Unable to start the settings manager 'mate-settings-daemon'.
@@ -39,6 +41,7 @@ Without the MATE settings manager running, some preferences may not take effect.
 This could indicate a problem with DBus, 
 or a non-MATE (e.g. KDE) settings manager may already be active and conflicting with the MATE settings manager.
 A: MATE, KDE, XFCE are all just Desktop environments, one of those layers between the hardware and the applications you use. They manages logging, panels, window buttons, virtual desktops. kde uses 3D and effects more than MATE and KDE.
+To solve this, just install mate-settings-daemon: sudo yum install mate-settings-daemon
 
 Debian8 uses systemd as its system and startup manager. systemd replaces SysVinit (System V Init)
 GRUB is the bootloader, legacy might only be able to access /boot in a separate partition
