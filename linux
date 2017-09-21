@@ -1,0 +1,78 @@
+- for tar.gz file just do one go with tar: tar -xzvf whatever.tar.gz someFolder
+- to config cntlm, go to /etc/cntlm.config, mostly just to update the hashed password. 
+To generate this hashed password, just run cntlm -H
+- Since this Linux is Red Hat, there will be certain developer tools. To list all Red Hat Dev Toolset packages available run
+sudo yum list available
+- Installing dictionary file: yum install words
+- For JVM, Oracle Hotspot is already in place, to implement OpenJDK:
+sudo yum install java-1.8.0-openjdk*
+- To see all java installation available on RHEL:
+sudo /usr/sbin/alternatives --config java
+Aside from the default Oracle Hotspot JVM, you will see your own installation of OpenJDK. Similarly for setting javac!
+- After setup cntlm, add this to .bashrc:
+export {http,HTTP,https,HTTPS,ftp,FTP}_{proxy,PROXY}=http://127.0.0.1:3128
+export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.131-2.b11.el7_3.x86_64"
+export PATH="$JAVA_HOME":"$PATH"
+- To use Internet run sudo cntlm -v -f
+- To delete blank lines in vi/vim run :g/^$/d
+- For RHEL, to check the distribution and version run cat /etc/redhat-release
+- For RHEL, to install git run sudo yum install git
+- configure your HTTPProxy in your IntelliJ:
+to use Manual mode hostname localhost and port 3128 of cntlm, No proxy for 10.*, 192.168.*, *.intranet, *.ing.net
+- configure the location of the default directory for IntelliJ to avoid running out of space!
+- mvn in IntelliJ needs the password string generated from artifactory site in the .m2/setting.xml
+- set local repository: {$user.home}/path/to/where/you/want/it and url should be file://{$user.home}/path/to/where/you/want/it
+- For maven to work in intelliJ, the certificate of the artifactory repository website needs to be added tothe java keystore: 
+To check if your JVM keystore (which is the file cacerts in %JAVA_HOME%\jre\lib\security) already have the certificate of artifactory 
+or any other parties'certificate (e.g: tfs), use keytool: 
+(keytool is jvm utility which should be recognize right away by your enviroment if you already set your JAVA_HOME. 
+For example your environment variable JAVA_HOME is "C:\Program Files\Java\jdk1.8.0_102"
+keytool -list -v -keystore cacerts -storepass changeit > somefile.txt
+You can browse your output file somefile.txt to verify if the certificate you interested in is already in there and still valid.
+To import the artifactory site's certificate into your keystore: 
+keytool -import -trustcacerts -keystore "%JAVA_HOME%\jre\lib\security\cacerts" -alias "someCert" -file someCert.cer -storepass changeit
+Note if it's really successful, you might need to run cmd as admin or sudo
+================================= Q&A
+Q:When Right-click on your desktop for 'Change Desktop Background', you got this message:
+Unable to start the settings manager 'mate-settings-daemon'.
+Without the MATE settings manager running, some preferences may not take effect. 
+This could indicate a problem with DBus, 
+or a non-MATE (e.g. KDE) settings manager may already be active and conflicting with the MATE settings manager.
+A: MATE, KDE, XFCE are all just Desktop environments, one of those layers between the hardware and the applications you use. They manages logging, panels, window buttons, virtual desktops. kde uses 3D and effects more than MATE and KDE.
+
+Debian8 uses systemd as its system and startup manager. systemd replaces SysVinit (System V Init)
+GRUB is the bootloader, legacy might only be able to access /boot in a separate partition
+Q: cat /proc/cmdline
+You can see which linux kernel, the location, and also see the command line being passed as the kernel options 
+such as ro meaning read online or quiet meaning not echoing back to the screen.
+reboot cmd to reboot and at the GRUB screen, you can fire Ctrl+E to edit the booting kernel options. 
+For example adding systemd.unit=recue.target
+Hit F10 key to continue the reboot phase
+Q: grep initdefault /etc/inittab
+This will no longer in used if systemd is being used instead of SysVinit(System V Init)
+Q: Mapping from Runlevel in SysVinit to Named Target in systemd (These are all known as Boot targets)
+0 = poweroff.target
+1 = rescue.target
+2,3,4 = multiuser.target
+5 = graphical.target
+6 = reboot.target
+Q: systemctl get-default
+A: to see which boot target is being set, to change to other targets, use systemctl set-default <named-target>
+Q: systemctl status/start/stop <service-unit>
+Q: who -r
+A: show the current run level, run-level would be currenly now 3 because it is multiuser.target 
+Q: runlevel
+A: also show the current run level
+Q: telinit 5
+A: will switch the run level to 5
+Q: systemctl isolate graphical.target
+A: will do the same, switching the run level to 5
+Q: shutdown -r +10 "We will reboot in 10 minutes"
+A: more preferred in the env where there are more users
+Q: reboot
+A: 
+Q: poweroff
+A
+Q: wall
+A: send message directly to all logged-in users, often piped together with echo a message
+lsblk
