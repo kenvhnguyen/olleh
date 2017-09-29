@@ -32,7 +32,17 @@ You can browse your output file somefile.txt to verify if the certificate you in
 To import the artifactory site's certificate into your keystore: 
 keytool -import -trustcacerts -keystore "%JAVA_HOME%\jre\lib\security\cacerts" -alias "someCert" -file someCert.cer -storepass changeit
 Note if it's really successful, you might need to run cmd as admin or sudo
-- install Debian package system command: sudo yum install dpkg (Probably not needed!)
+- install Debian package system command: sudo yum install dpkg
+- update firefox to firefox-52.1.2-1.el7.x86_64 produced an error:
+XPCOMGlueLoad error for file /usr/lib64/firefox/libxul.so:
+/lib64/libnss3.so: version `NSS_3.30' not found (required by /usr/lib64/firefox/libxul.so)
+This is due to the  _nspr_ and _nss_ packages not being updated from the Red Hat Enterprise Linux 7.4 batch.
+Just do a yum update to update your linux installation is enough to fix this. However, lost the user EUROPE\m05b372 and even sudo
+sudo is now attached to ts41ez. Since the drive is seperated drive, home directory of EUROPE\m05b372 is still intact. 
+Copy over the file .bashrc, the rest are still on the share opt/data/devtop so only to change ownership
+sudo chown -R ts41ez:ts41ez /opt/data/devtop/data similarly for the rest.
+Recreate some soft links: ln -s /opt/data/devtop/data data/
+Copy over also .m2 directory for maven user settings file and custom local repo
 
 ================================= Q&A
 Q:When Right-click on your desktop for 'Change Desktop Background', you got this message:
